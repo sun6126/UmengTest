@@ -4,7 +4,9 @@ import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -13,13 +15,15 @@ import androidx.core.app.NotificationCompat
 
 
 class NotificationActivity : AppCompatActivity() {
+
+    var notificationNum: Int = 0;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification)
         createNotificationChannel()
     }
 
-    fun createNotificationChannel() {
+    private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 安卓八版本以上，要创建通知渠道
             var channelId = "chat"
             var channelName = "聊天消息"
@@ -36,6 +40,7 @@ class NotificationActivity : AppCompatActivity() {
     @TargetApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(channelId: String, channelName: String, importance: Int) {
         val channel = NotificationChannel(channelId, channelName, importance)
+        channel.setShowBadge(true) // 在创建通知渠道的时候，调用了NotificationChannel的setShowBadge(true)方法，表示允许这个渠道下的通知显示角标。
         val notificationManager = getSystemService(
             NOTIFICATION_SERVICE
         ) as NotificationManager
@@ -48,6 +53,7 @@ class NotificationActivity : AppCompatActivity() {
             .setContentTitle("收到一条聊天消息")
             .setContentText("今天中午吃什么？")
             .setWhen(System.currentTimeMillis())
+            .setNumber(++notificationNum) // 设置app角标数量
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setLargeIcon(
                 BitmapFactory.decodeResource(
@@ -58,6 +64,8 @@ class NotificationActivity : AppCompatActivity() {
             .setAutoCancel(true)
             .build()
         manager.notify(1, notification)
+
+        showBadgeOfEMUI(this, notificationNum)
     }
 
     fun sendSubscribeMsg(view: View) {
@@ -78,5 +86,19 @@ class NotificationActivity : AppCompatActivity() {
         manager.notify(2, notification)
     }
 
+    // 华为的消息角标需要事先声明两个权限：INTERNET和CHANGE_BADGE
+    private fun showBadgeOfEMUI(ctx: Context, count: Int) {
+        try {
+            val extra = Bundle() // 创建一个包裹对象
+            extra.putString("package", BuildConfig.APPLICATION_ID) // 应用的包名
+            extra.putString("class", BuildConfig.APPLICATION_ID + ".MainActivity") // 应用的首屏页面路径
+            extra.putInt("badgenumber", count) // 应用的消息数量
+            val uri: Uri = Uri.parse("content://com.huawei.android.launcher.settings/badge/")
+            // 通过内容解析器调用华为内核的消息角标服务
+            ctx.getContentResolver().call(uri, "change_badge", null, extra)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
 }
