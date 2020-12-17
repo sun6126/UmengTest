@@ -20,21 +20,7 @@ class NotificationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification)
-        createNotificationChannel()
-    }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 安卓八版本以上，要创建通知渠道
-            var channelId = "chat"
-            var channelName = "聊天消息"
-            var importance = NotificationManager.IMPORTANCE_HIGH
-            createNotificationChannel(channelId, channelName, importance)
-
-            channelId = "subscribe"
-            channelName = "订阅消息"
-            importance = NotificationManager.IMPORTANCE_DEFAULT
-            createNotificationChannel(channelId, channelName, importance)
-        }
+        Companion.createNotificationChannel(this)
     }
 
     @TargetApi(Build.VERSION_CODES.O)
@@ -65,7 +51,7 @@ class NotificationActivity : AppCompatActivity() {
             .build()
         manager.notify(1, notification)
 
-        showBadgeOfEMUI(this, notificationNum)
+//        showBadgeOfEMUI(this, notificationNum)
     }
 
     fun sendSubscribeMsg(view: View) {
@@ -98,6 +84,22 @@ class NotificationActivity : AppCompatActivity() {
             ctx.getContentResolver().call(uri, "change_badge", null, extra)
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    companion object {
+        public fun createNotificationChannel(notificationActivity: NotificationActivity) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 安卓八版本以上，要创建通知渠道
+                var channelId = "chat"
+                var channelName = "聊天消息"
+                var importance = NotificationManager.IMPORTANCE_HIGH
+                notificationActivity.createNotificationChannel(channelId, channelName, importance)
+
+                channelId = "subscribe"
+                channelName = "订阅消息"
+                importance = NotificationManager.IMPORTANCE_DEFAULT
+                notificationActivity.createNotificationChannel(channelId, channelName, importance)
+            }
         }
     }
 
