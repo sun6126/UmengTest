@@ -11,12 +11,15 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.multidex.MultiDex
 import com.umeng.commonsdk.UMConfigure
 import com.umeng.message.IUmengRegisterCallback
 import com.umeng.message.PushAgent
 import com.umeng.message.UmengMessageHandler
 import com.umeng.message.UmengNotificationClickHandler
 import com.umeng.message.entity.UMessage
+import org.android.agoo.huawei.HuaWeiRegister
+import org.android.agoo.mezu.MeizuRegister
 
 
 class MyApplication : Application() {
@@ -36,19 +39,8 @@ class MyApplication : Application() {
 
         // 成员函数getNotification负责定义通知栏样式
         override fun getNotification(context: Context?, msg: UMessage?): Notification {
-            when (msg?.builder_id) {
-                1 -> {
-                    return createNotification(context!!, msg)
-                }
-
-                0 -> { //默认为0，若填写的builder_id并不存在，也使用默认。
-                    return super.getNotification(context, msg);
-                }
-
-            }
-            return super.getNotification(context, msg)
+            return createNotification(context!!, msg!!)
         }
-
     }
 
     override fun onCreate() {
@@ -75,6 +67,13 @@ class MyApplication : Application() {
         val mPushAgent = PushAgent.getInstance(this)
         // mPushAgent.setNotificaitonOnForeground(false) // 应用在前台时不显示通知，要在register之前调用
 
+
+        mPushAgent.notificationClickHandler = notificationClickHandler
+        mPushAgent.messageHandler = messageHandler
+
+        HuaWeiRegister.register(this)
+        MeizuRegister.register(this, "137761", "9ed2d067b4254d88967e23004bec229f")
+
         //注册推送服务，每次调用register方法都会回调该接口
         //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(object : IUmengRegisterCallback {
@@ -87,15 +86,16 @@ class MyApplication : Application() {
                 Log.e(TAG, "注册失败：-------->  s:$s,s1:$s1")
             }
         })
-        mPushAgent.notificationClickHandler = notificationClickHandler
-        mPushAgent.messageHandler = messageHandler
     }
+
+    var notificationNum = 0
 
     fun createNotification(context: Context, msg: UMessage): Notification {
         return NotificationCompat.Builder(context, "chat")
             .setContentTitle(msg.title)
             .setContentText(msg.text)
             .setWhen(System.currentTimeMillis())
+            .setNumber(++notificationNum) // 设置app角标数量
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setLargeIcon(
                 BitmapFactory.decodeResource(
