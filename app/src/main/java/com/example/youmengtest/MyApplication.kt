@@ -20,6 +20,7 @@ import com.umeng.message.UmengNotificationClickHandler
 import com.umeng.message.entity.UMessage
 import org.android.agoo.huawei.HuaWeiRegister
 import org.android.agoo.mezu.MeizuRegister
+import org.android.agoo.xiaomi.MiPushRegistar
 
 
 class MyApplication : Application() {
@@ -73,6 +74,7 @@ class MyApplication : Application() {
 
         HuaWeiRegister.register(this)
         MeizuRegister.register(this, "137761", "9ed2d067b4254d88967e23004bec229f")
+        MiPushRegistar.register(this, "2882303761518932678", "5991893249678")
 
         //注册推送服务，每次调用register方法都会回调该接口
         //注册推送服务，每次调用register方法都会回调该接口

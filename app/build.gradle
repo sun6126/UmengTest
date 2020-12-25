@@ -79,5 +79,8 @@ dependencies {
     // 导入魅族Push通道SDK。
     implementation 'com.umeng.umsdk:meizu-push:3.8.7'
     implementation 'com.umeng.umsdk:meizu-umengaccs:1.1.1'
+    // 导入小米Push通道SDK。
+    implementation 'com.umeng.umsdk:xiaomi-push:3.7.0'
+    implementation 'com.umeng.umsdk:xiaomi-umengaccs:1.1.4'
 
 }
