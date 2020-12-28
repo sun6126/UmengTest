@@ -15,15 +15,20 @@
     <uses-permission android:name="android.permission.BROADCAST_PACKAGE_INSTALL" />
     <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REPLACED" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- 以下为需要的基本权限，需要自行添加至您的AndroidManifest文件中 end -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 以下为需要的基本权限，需要自行添加至您的AndroidManifest文件中 end -->
     <!-- 角标相关的权限配置 -->
     <!-- 华为 -->
-    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" /> <!-- 三星 -->
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+    <!-- 三星 -->
     <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
-    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" /> <!-- OPPO -->
+    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" />
+    <!-- OPPO -->
     <uses-permission android:name="com.oppo.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.oppo.launcher.permission.WRITE_SETTINGS" /> <!-- 联想ZUK -->
-    <uses-permission android:name="android.permission.READ_APP_BADGE" /> <!-- HTC -->
+    <uses-permission android:name="com.oppo.launcher.permission.WRITE_SETTINGS" />
+    <!-- 联想ZUK -->
+    <uses-permission android:name="android.permission.READ_APP_BADGE" />
+    <!-- HTC -->
     <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT" />
 
